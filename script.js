@@ -58,7 +58,6 @@ btnDisplay.addEventListener('click', () => {
     input6.value = '';
     input7.value = '';
 
-    console.log(dataStorage)
 
     
 })
