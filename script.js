@@ -32,7 +32,8 @@ btnDisplay.addEventListener('click', () => {
     }
 
     dataStorage.push(data);
-
+    
+    // Inserting Each Value to the Table
     dataStorage.forEach((value) => {
         table.insertAdjacentHTML('beforeend',
         `
@@ -48,7 +49,7 @@ btnDisplay.addEventListener('click', () => {
         ` 
     )
     })
-
+    // Reset the Inputs
     input1.value = '';
     input2.value = '';
     input3.value = '';
