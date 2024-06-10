@@ -433,110 +433,101 @@ ipClassBtn.addEventListener('click', () => {
     firstOctet = ipSplitting(ipAddress.value);
     ipClass = getIpClasses(firstOctet);
     defaultSM = getDefaultSM(ipClass);
-    ipDiv.innerHTML = `
-        <table class="output-info">
-            <tr>
-                <td>IP Address Class</td>
-                <td>${ipClass}</td>
-            </tr>
-        </table>
-    `
+    alert(`The Ip Class Addrress is ${ipClass}`)
 });
 
 
 optionBtn.addEventListener('click', () => {
+    if(outputDiv.children.length == 2) outputDiv.lastElementChild.remove();
+    if(Number.isInteger(parseInt(reqNumber.value))  && option.value != 'default') {
 
+        networkAddress = 0;
+        firstOctet = ipSplitting(ipAddress.value);
+        ipClass = getIpClasses(firstOctet);
+        defaultSM = getDefaultSM(ipClass);
 
-            if(outputDiv.children.length == 2) outputDiv.lastElementChild.remove();
-            networkAddress = 0;
-            if(Number.isInteger(parseInt(reqNumber.value))  && option.value != 'default') {
+        if(option.value == 'subnet') {
+            if(ipClass == 'A' && reqNumber.value > 4194304) return alert('The maximum subnet can accommodate in Class A is  4194304');
+            if(ipClass == 'B' && reqNumber.value > 16384) return alert('The maximum subnet can accommodate in Class B is 16384.');
+            if(ipClass == 'C' && reqNumber.value > 64) return alert('The maximum subnet can accommodate in Class C is 64');
+            
+            
+            // Calculations
+            let subnetNeeded = reqNumber.value;
+            borrowedBits = getBorrowedBits(subnetNeeded);
+            numOfSubnet = 2 ** borrowedBits
+            newPrefix = defaultPrefix + borrowedBits;
+            borrowedBitsValue = sumFinder(borrowedBits)
+            octetManipulator(newPrefix, borrowedBitsValue);
+            numOfHost = 2 ** (32 - newPrefix);
+            incrementFinder(borrowedBitsValue);
+            tableOuputs();
+            
+            
+        }
+        else if (option.value == 'host') {
 
-                firstOctet = ipSplitting(ipAddress.value);
-                ipClass = getIpClasses(firstOctet);
-                defaultSM = getDefaultSM(ipClass);
-    
-                if(option.value == 'subnet') {
-                    if(ipClass == 'A' && reqNumber.value > 4194304) return alert('The maximum subnet can accommodate in Class A is  4194304');
-                    if(ipClass == 'B' && reqNumber.value > 16384) return alert('The maximum subnet can accommodate in Class B is 16384.');
-                    if(ipClass == 'C' && reqNumber.value > 64) return alert('The maximum subnet can accommodate in Class C is 64');
-                    
-                    
-                    // Calculations
-                    let subnetNeeded = reqNumber.value;
-                    borrowedBits = getBorrowedBits(subnetNeeded);
-                    numOfSubnet = 2 ** borrowedBits
-                    newPrefix = defaultPrefix + borrowedBits;
-                    borrowedBitsValue = sumFinder(borrowedBits)
-                    octetManipulator(newPrefix, borrowedBitsValue);
-                    numOfHost = 2 ** (32 - newPrefix);
-                    incrementFinder(borrowedBitsValue);
-                    tableOuputs();
-                    
-                    
-                }
-                else if (option.value == 'host') {
-        
-                    // Validations
-                    if(ipClass == 'C' && (reqNumber.value <= 2 || reqNumber.value > 256 )) return alert('The maximum host can accommodate in Class C is 256');
-                    if(ipClass == 'B' && (reqNumber.value <= 2 || reqNumber.value > 65534)) return alert('The maximum host can accommodate in Class B is 65534.');
-                    if(ipClass == 'A' && (reqNumber.value <= 2 || reqNumber.value > 16777214)) return alert('The maximum host can accommodate in Class B is 16777214.');
-        
-                    // Calculations 
-                    let hostNeeded = reqNumber.value;
-                    borrowedBits = (32 - getBorrowedBits(hostNeeded) - defaultPrefix);
-                    newPrefix = 32 - getBorrowedBits(hostNeeded);
-                    borrowedBitsValue = sumFinder(borrowedBits);
-                    numOfHost = 2 ** (32 - newPrefix);
-                    octetManipulator(newPrefix, borrowedBitsValue);
-                    incrementFinder(borrowedBitsValue);
-                    tableOuputs();
-                }
-    
-                // Rendering the Structure
-                ipDiv.innerHTML = `
-                    <table class="output-info">
-                        <tr>
-                            <td>IP Address Class</td>
-                            <td>${ipClass}</td>
-                        </tr>
-                        <tr>
-                            <td>Default Subnet Mask</td>  
-                            <td>${defaultSM} / ${defaultPrefix}</td>                  
-                        </tr>
-                        <tr>
-                            <td>IP Address </td>
-                            <td>${ipAddress.value}</td>
-                        </tr>    
-                        <tr>
-                            <td>No. of Subnets can Accommodate</td>
-                            <td>${numOfSubnet}</td>
-                        </tr>
-                        <tr>
-                            <td>No. of Host can Accommodate</td>
-                            <td>${numOfHost}</td>
-                        </tr>
-                        <tr>
-                            <td>Subnet Mask </td>
-                            <td>${newSubnetMask} / ${newPrefix}</td>
-                        </tr>
-                        <tr>
-                            <td>No. of Increment </td>
-                            <td>${increment}<p/>
-                        </tr>
-                        <tr>
-                            <td>No. of Borrowed Bits: </td>
-                            <td>${borrowedBits}<p/>
-                        </tr>
-                        
-                    </table>
-                `;
-            }
-            else {
-                return alert('Invalid Input');
-            }
-        
-            ipAddress.value = '';
-            reqNumber.value = '';
+            // Validations
+            if(ipClass == 'C' && (reqNumber.value <= 2 || reqNumber.value > 256 )) return alert('The maximum host can accommodate in Class C is 256');
+            if(ipClass == 'B' && (reqNumber.value <= 2 || reqNumber.value > 65534)) return alert('The maximum host can accommodate in Class B is 65534.');
+            if(ipClass == 'A' && (reqNumber.value <= 2 || reqNumber.value > 16777214)) return alert('The maximum host can accommodate in Class B is 16777214.');
+
+            // Calculations 
+            let hostNeeded = reqNumber.value;
+            borrowedBits = (32 - getBorrowedBits(hostNeeded) - defaultPrefix);
+            newPrefix = 32 - getBorrowedBits(hostNeeded);
+            borrowedBitsValue = sumFinder(borrowedBits);
+            numOfHost = 2 ** (32 - newPrefix);
+            octetManipulator(newPrefix, borrowedBitsValue);
+            incrementFinder(borrowedBitsValue);
+            tableOuputs();
+        }
+
+        // Rendering the Structure
+        ipDiv.innerHTML = `
+            <table class="output-info">
+                <tr>
+                    <td>IP Address Class</td>
+                    <td>${ipClass}</td>
+                </tr>
+                <tr>
+                    <td>Default Subnet Mask</td>  
+                    <td>${defaultSM} / ${defaultPrefix}</td>                  
+                </tr>
+                <tr>
+                    <td>IP Address </td>
+                    <td>${ipAddress.value}</td>
+                </tr>    
+                <tr>
+                    <td>No. of Subnets can Accommodate</td>
+                    <td>${numOfSubnet}</td>
+                </tr>
+                <tr>
+                    <td>No. of Host can Accommodate</td>
+                    <td>${numOfHost}</td>
+                </tr>
+                <tr>
+                    <td>Subnet Mask </td>
+                    <td>${newSubnetMask} / ${newPrefix}</td>
+                </tr>
+                <tr>
+                    <td>No. of Increment </td>
+                    <td>${increment}<p/>
+                </tr>
+                <tr>
+                    <td>No. of Borrowed Bits: </td>
+                    <td>${borrowedBits}<p/>
+                </tr>
+                
+            </table>
+        `;
+    }
+    else {
+        return alert('Invalid Input');
+    }
+
+    ipAddress.value = '';
+    reqNumber.value = '';
 });
 
 
