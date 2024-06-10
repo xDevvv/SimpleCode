@@ -3,9 +3,7 @@ const option = document.getElementById('input-option');
 const ipDiv = document.querySelector('.sub');
 const ipAddress = document.getElementById('ip-address');
 const reqNumber = document.querySelector('.subnet-host-input');
-
-const finalResult = document.querySelector('.main-table');
-const error = document.querySelector('.error');
+const outputDiv = document.querySelector('.main-container');
 
 
 // Buttons
@@ -354,6 +352,7 @@ const outputCalc = () => {
 
 
 const tableOuputs = () => {
+
     if(ipClass == 'C') {
         if(networkAddress == 0) {
             firstUsableHost = networkAddress + 1;
@@ -367,7 +366,21 @@ const tableOuputs = () => {
     else {
         outputCalc();
     }
-    
+
+    outputDiv.insertAdjacentHTML('beforeend', `
+        <div class="second-sub-container">
+            <table class="main-table">
+                <tr>
+                    <th class="row-num">Row No.</th>
+                    <th>Network Address</th>
+                    <th>Host Range Usable</th>
+                    <th>Broadcast Address</th>
+                </tr>
+            </table>
+        </div>
+        
+    `); 
+    const finalResult = document.querySelector('.main-table');
 
     
     let numOfRow = 1;
@@ -378,7 +391,7 @@ const tableOuputs = () => {
         let broadcast_address = getBroadcastAdd(broadcastAddress);
 
 
-
+        
         finalResult.insertAdjacentHTML('beforeend', `
             <tr>
                 <td class="row-num">
@@ -432,7 +445,10 @@ ipClassBtn.addEventListener('click', () => {
 
 
 optionBtn.addEventListener('click', () => {
-            
+
+
+            if(outputDiv.children.length == 2) outputDiv.lastElementChild.remove();
+            networkAddress = 0;
             if(Number.isInteger(parseInt(reqNumber.value))  && option.value != 'default') {
 
                 firstOctet = ipSplitting(ipAddress.value);
@@ -440,9 +456,9 @@ optionBtn.addEventListener('click', () => {
                 defaultSM = getDefaultSM(ipClass);
     
                 if(option.value == 'subnet') {
-                    if(ipClass == 'A' && reqNumber.value > 4194304) return error.innerHTML = `<p>The maximum subnet can accommodate in Class A is  4194304 </p>`;
-                    if(ipClass == 'B' && reqNumber.value > 16384) return error.innerHTML = `<p>The maximum subnet can accommodate in Class B is 16384.</p>`;
-                    if(ipClass == 'C' && reqNumber.value > 64) return error.innerHTML = `<p>The maximum subnet can accommodate in Class C is 64.</p>`;
+                    if(ipClass == 'A' && reqNumber.value > 4194304) return alert('The maximum subnet can accommodate in Class A is  4194304');
+                    if(ipClass == 'B' && reqNumber.value > 16384) return alert('The maximum subnet can accommodate in Class B is 16384.');
+                    if(ipClass == 'C' && reqNumber.value > 64) return alert('The maximum subnet can accommodate in Class C is 64');
                     
                     
                     // Calculations
@@ -461,9 +477,9 @@ optionBtn.addEventListener('click', () => {
                 else if (option.value == 'host') {
         
                     // Validations
-                    if(ipClass == 'C' && (reqNumber.value <= 2 || reqNumber.value > 256 )) return error.innerHTML = `<p>The maximum host can accommodate in Class C is 256.</p>`;
-                    if(ipClass == 'B' && (reqNumber.value <= 2 || reqNumber.value > 65534)) return error.innerHTML = `<p>The maximum host can accommodate in Class B is 65534.</p>`;
-                    if(ipClass == 'A' && (reqNumber.value <= 2 || reqNumber.value > 16777214)) return error.innerHTML = `<p>The maximum host can accommodate in Class B is 16777214.</p>`;
+                    if(ipClass == 'C' && (reqNumber.value <= 2 || reqNumber.value > 256 )) return alert('The maximum host can accommodate in Class C is 256');
+                    if(ipClass == 'B' && (reqNumber.value <= 2 || reqNumber.value > 65534)) return alert('The maximum host can accommodate in Class B is 65534.');
+                    if(ipClass == 'A' && (reqNumber.value <= 2 || reqNumber.value > 16777214)) return alert('The maximum host can accommodate in Class B is 16777214.');
         
                     // Calculations 
                     let hostNeeded = reqNumber.value;
@@ -516,7 +532,7 @@ optionBtn.addEventListener('click', () => {
                 `;
             }
             else {
-                return alert('Invalid Input')
+                return alert('Invalid Input');
             }
         
             ipAddress.value = '';
