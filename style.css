@@ -7,7 +7,7 @@
 :root {
     --firstColor: #1F4875;
     --secondColor: #00C9A7;
-    --thirdColor: #7F91B3;
+    --thirdColor: #545479;
 }
 
 body {
@@ -197,4 +197,5 @@ select {
 .row-num {
     width: 40px;
 }
+
 
