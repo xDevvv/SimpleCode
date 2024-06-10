@@ -433,7 +433,7 @@ ipClassBtn.addEventListener('click', () => {
     firstOctet = ipSplitting(ipAddress.value);
     ipClass = getIpClasses(firstOctet);
     defaultSM = getDefaultSM(ipClass);
-    alert(`The Ip Class Addrress is ${ipClass}`)
+    alert(`The Ip Class Address is ${ipClass}`)
 });
 
 
