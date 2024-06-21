@@ -17,11 +17,11 @@ let defaultSM;
 let newSubnetMask;
 let defaultPrefix;
 let newPrefix;
-let requiredHost;
 let increment;
 let borrowedBits;
 let borrowedBitsValue;
-let subnetMaskNumber;
+
+
 
 let numOfSubnet = 0;
 let numOfHost = 0;
@@ -371,7 +371,7 @@ const tableOuputs = () => {
         <div class="second-sub-container">
             <table class="main-table">
                 <tr>
-                    <th class="row-num">Row No.</th>
+                    <th class="row-num">Subnet No.</th>
                     <th>Network Address</th>
                     <th>Host Range Usable</th>
                     <th>Broadcast Address</th>
@@ -472,7 +472,7 @@ optionBtn.addEventListener('click', () => {
             if(ipClass == 'B' && (reqNumber.value <= 2 || reqNumber.value > 65534)) return alert('The maximum host can accommodate in Class B is 65534.');
             if(ipClass == 'A' && (reqNumber.value <= 2 || reqNumber.value > 16777214)) return alert('The maximum host can accommodate in Class B is 16777214.');
 
-            // Calculations 
+            // Calculations
             let hostNeeded = reqNumber.value;
             borrowedBits = (32 - getBorrowedBits(hostNeeded) - defaultPrefix);
             newPrefix = 32 - getBorrowedBits(hostNeeded);
